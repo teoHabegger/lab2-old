@@ -1,4 +1,4 @@
-package PACKAGE_NAME;
-
 public interface HasLiftBed {
+        void raiseBed(double amount);
+        void lowerBed(double amount);
 }

@@ -1,6 +1,6 @@
 import java.awt.*;
 
-public  class Scania extends Truck {
+public  class Scania extends Truck implements HasLiftBed {
 
     private double platformAngle;
 
@@ -9,27 +9,32 @@ public  class Scania extends Truck {
         platformAngle = 0;
     }
 
-    public void raisePlatform(double amount) {
-        if (platformAngle + amount > 70)
-            throw new IllegalArgumentException("The angle of the platform can't go above 70");
-        platformChecks(amount);
-        platformAngle = platformAngle + amount;
-    }
+    @Override
+    public void raiseBed(double amount) {
 
-    public void lowerPlatform(double amount) {
-        if (platformAngle - amount < 0)
-            throw new IllegalArgumentException("The angle of the platform can't go below 0");
-        platformChecks(amount);
-        platformAngle = platformAngle - amount;
-    }
-
-    private void platformChecks(double amount) {
-        if (getCurrentSpeed() != 0)
-            throw new IllegalArgumentException("Vehicle can't be moving if you want to move the platform");
         if (amount < 0) {
             throw new IllegalArgumentException("No negative numbers allowed as input");
         }
+
+        if (getCurrentSpeed() != 0) return;
+
+        if (platformAngle + amount > 70)
+            throw new IllegalArgumentException("The angle of the platform can't go above 70");
+        platformAngle =+ amount;
     }
+
+    @Override
+    public void lowerBed(double amount) {
+        if (amount < 0) {
+            throw new IllegalArgumentException("No negative numbers allowed as input");
+        }
+        if (getCurrentSpeed() != 0) return;
+
+        if (platformAngle - amount < 0)
+            throw new IllegalArgumentException("The angle of the platform can't go below 0");
+        platformAngle =- amount;
+    }
+
 
     public double getPlatformAngle() {
         return platformAngle;
@@ -37,15 +42,13 @@ public  class Scania extends Truck {
 
     @Override
     public void move() {
-        if (platformAngle > 0)
-            throw new IllegalArgumentException("Truck can't move if the platform is off the ground");
+        if (platformAngle > 0) return;
         super.move();
     }
 
     @Override
     public void gas(double amount) {
-        if (platformAngle > 0)
-            throw new IllegalStateException("Truck can't change speeds if the platform is off the ground");
+        if (platformAngle > 0) return;
         super.gas(amount);
     }
 }

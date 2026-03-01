@@ -32,6 +32,7 @@ public class Workshop <T extends Car> {
         return storedCars.isEmpty();
     }
 
+
     public void load(T car) {
         if (car == null) {
             throw new NoSuchElementException("Car must not be null");
