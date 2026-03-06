@@ -22,47 +22,49 @@ public class CarController {
     // The frame that represents this instance View of the MVC pattern
     CarView frame;
 
-    ArrayList<Vehicle> cars = new ArrayList<>();
-
-    final Workshop<Volvo240> volvo240Workshop = new Workshop<>(10);
-
     public static void main(String[] args) {
         CarController cc = new CarController();
 
-        cc.cars.add(new Volvo240());
-        cc.cars.add(new Saab95());
-        cc.cars.add(new Scania());
+        cc.sim.addVehicle(VehicleFactory.createVehicle(VehicleType.VOLVO240));
+        cc.sim.addVehicle(VehicleFactory.createVehicle(VehicleType.SAAB95));
+        cc.sim.addVehicle(VehicleFactory.createVehicle(VehicleType.SCANIA));
 
-        cc.cars.get(0).setPosition(0, 0);
-        cc.cars.get(1).setPosition(0, 100);
-        cc.cars.get(2).setPosition(0, 200);
+        cc.sim.getCars().get(0).setPosition(0, 0);
+        cc.sim.getCars().get(1).setPosition(0, 100);
+        cc.sim.getCars().get(2).setPosition(0, 200);
 
-        cc.frame = new CarView("CarSim 1.0", cc);
+        cc.frame = new CarView("CarSim 1.0", cc.sim, cc);
 
         cc.timer.start();
+
+        cc.sim.addObservers(cc.frame);
     }
 
     private class TimerListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             // NEW: one call, all previous tick logic is inside Simulation
-            sim.tick(frame, cars, volvo240Workshop, e);
+            sim.tick();
         }
     }
 
     // UI commands delegate to Simulation (logic moved there)
-    void gas(int amount) { sim.gas(cars, amount); }
+    void gas(int amount) { sim.gas(sim.getCars(), amount); }
 
-    void brake(int amount) { sim.brake(cars, amount); }
+    void brake(int amount) { sim.brake(sim.getCars(), amount); }
 
-    void startEngine() { sim.startEngine(cars); }
+    void startEngine() { sim.startEngine(sim.getCars()); }
 
-    void stopEngine() { sim.stopEngine(cars); }
+    void stopEngine() { sim.stopEngine(sim.getCars()); }
 
-    void setTurboOn() { sim.setTurboOn(cars); }
+    void setTurboOn() { sim.setTurboOn(sim.getCars()); }
 
-    void setTurboOff() { sim.setTurboOff(cars); }
+    void setTurboOff() { sim.setTurboOff(sim.getCars()); }
 
-    void liftBed() { sim.liftBed(cars); }
+    void liftBed() { sim.liftBed(sim.getCars()); }
 
-    void lowerBed() { sim.lowerBed(cars); }
+    void lowerBed() { sim.lowerBed(sim.getCars()); }
+
+    void addCar() { sim.addCAr();}
+
+    void removeCar() { sim.removeCar(); }
 }

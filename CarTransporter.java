@@ -4,35 +4,33 @@ import java.util.Deque;
 
 public class CarTransporter extends Truck {
 
-    private boolean platformRaised;
     private  int maxCars;
     private Deque<Car> loadedCars;
+    private RampState rampState;
 
     public CarTransporter() {
         super(2, 70, Color.gray, "lab2.CarTransporter", 5);
-        platformRaised = true;
         maxCars = 10;
         loadedCars = new ArrayDeque<Car>();
+        rampState = new StateRampUp();
     }
 
     public  void setPlatformRaised() {
-        platformRaised = true;
+        rampState.raiseRamp(this);
     }
 
     public void setPlatformDown() {
-        if (getCurrentSpeed() != 0)
-            throw  new IllegalStateException("Vehicle has to be stationary to lower the ramp");
-        platformRaised = false;
+        rampState.lowerRamp(this);
     }
 
-    public boolean isPlatformRaised() {
-        return platformRaised;
+    public void setRampState(RampState rampState){
+        this.rampState = rampState;
     }
 
     @Override
     public  void move() {
-        if (!platformRaised)
-            throw new IllegalArgumentException("Truck can't move if the platform is off the ground");
+        if (!rampState.isPlatformUp())
+            throw new IllegalStateException("Truck can't move if the platform is off the ground");
         super.move();
 
         syncCarPos();
@@ -47,7 +45,7 @@ public class CarTransporter extends Truck {
 
     @Override
     public void gas(double amount) {
-        if (!platformRaised)
+        if (!rampState.isPlatformUp())
             throw new IllegalStateException("Truck can't change speeds if the platform is off the ground");
         super.gas(amount);
     }
@@ -62,7 +60,7 @@ public class CarTransporter extends Truck {
             throw new IllegalStateException("Max amount of cars has been reached");
         if (car.getSize() >= 5)
             throw new IllegalStateException("Vehicle is too big");
-        if (platformRaised)
+        if (rampState.isPlatformUp())
             throw new IllegalStateException("Can't load vehicles if platform is raised");
 
         double distance = Math.abs(this.getX() - car.getX()) + Math.abs(this.getY() - car.getY());
@@ -75,7 +73,7 @@ public class CarTransporter extends Truck {
     }
 
     public Car unloadCar() {
-        if (platformRaised)
+        if (rampState.isPlatformUp())
             throw new IllegalStateException("Can't unload vehicles if platform is raised");
         if (getCurrentSpeed() != 0)
             throw new IllegalStateException("Car transporter has to be stationary to unload a car");

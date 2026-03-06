@@ -7,6 +7,8 @@ public  class Scania extends Truck implements HasLiftBed {
     public Scania() {
         super(2, 80, Color.white, "lab2.Scania", 6);
         platformAngle = 0;
+        width = 100;
+        height = 60;
     }
 
     @Override

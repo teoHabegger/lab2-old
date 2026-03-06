@@ -8,6 +8,8 @@ public class Saab95 extends Car implements HasTurbo {
     public Saab95(){
         super(2, 125, Color.red, "lab1.Saab95", 2);
         turboOn = false;
+        width = 100;
+        height = 60;
     }
 
     @Override

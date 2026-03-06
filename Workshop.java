@@ -6,14 +6,22 @@ public class Workshop <T extends Car> {
 
     private final int capacity;
     private final List<T> storedCars;
+    private final int width;
+    private final int height;
+    private final int x;
+    private final int y;
 
-    public Workshop(int capacity) {
+    public Workshop(int capacity, int x, int y) {
         if (capacity < 0) {
             throw new IllegalArgumentException("Capacity must be greater than or equal to 0");
         }
         this.capacity = capacity;
         this.storedCars = new ArrayList<>();
 
+        this.width = 101;
+        this.height = 96;
+        this.x = x;
+        this.y = y;
     }
 
     public int getCapacity() {
@@ -53,4 +61,12 @@ public class Workshop <T extends Car> {
         return storedCars.remove(index);
 
     }
+
+    public int getWidth() { return width; }
+
+    public int getHeight() { return height; }
+
+    public int getX() { return x; }
+
+    public int getY() { return y; }
 }

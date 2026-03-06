@@ -16,17 +16,14 @@ public class DrawPanel extends JPanel{
     BufferedImage volvoWorkshopImage;
     Point volvoWorkshopPoint = new Point(0,400);
 
-    // TODO: Make this general for all cars
-    void moveit(int x, int y, int index){
-        vehiclePoints.get(index).x = x;
-        vehiclePoints.get(index).y = y;
-    }
+    private Simulation sim;
 
     // Initializes the panel and reads the images
-    public DrawPanel(int x, int y) {
+    public DrawPanel(int x, int y, Simulation sim) {
         this.setDoubleBuffered(true);
         this.setPreferredSize(new Dimension(x, y));
         this.setBackground(Color.green);
+        this.sim = sim;
 
         vehicleImages = new ArrayList<>();
         vehiclePoints = new ArrayList<>();
@@ -63,30 +60,28 @@ public class DrawPanel extends JPanel{
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        for (int i = 0; i < vehicleImages.size(); i++) {
-            Point point = vehiclePoints.get(i);
-            g.drawImage(vehicleImages.get(i), point.x, point.y, null);
+
+        ArrayList<Vehicle> cars = sim.getCars();
+
+        for (int i = 0; i < cars.size(); i++) {
+            Vehicle vehicle = sim.getCars().get(i);
+            BufferedImage currentImage;
+
+            if (vehicle instanceof Volvo240) currentImage = vehicleImages.get(0);
+            else if (vehicle instanceof Saab95) currentImage = vehicleImages.get(1);
+            else if (vehicle instanceof Scania) currentImage = vehicleImages.get(2);
+            else continue;
+
+            g.drawImage(
+                    currentImage, (int) vehicle.getX(), (int) vehicle.getY(),
+                    vehicle.getWidth(), vehicle.getHeight(), null
+            );
         }
-        g.drawImage(volvoWorkshopImage, volvoWorkshopPoint.x, volvoWorkshopPoint.y, null);
+
+        Workshop<Volvo240> workshop = sim.getWorkshop();
+
+        g.drawImage(
+                volvoWorkshopImage, workshop.getX(), workshop.getY(),
+                workshop.getWidth(), workshop.getHeight(), null);
     }
-
-    public int getVehicleWidth(int index) {
-        return vehicleImages.get(index).getWidth();
-    }
-
-    public int getVehicleHeight(int index) {
-        return vehicleImages.get(index).getHeight();
-    }
-
-    public int getWorkShopX() { return volvoWorkshopPoint.x; }
-    public int getWorkShopY() { return volvoWorkshopPoint.y; }
-
-    public int getWorkShopWidth() { return volvoWorkshopImage.getWidth(); }
-    public int getWorkShopHeight() { return volvoWorkshopImage.getHeight(); }
-
-    public void removeVehicle (int index) {
-        vehicleImages.remove(index);
-        vehiclePoints.remove(index);
-    }
-
 }

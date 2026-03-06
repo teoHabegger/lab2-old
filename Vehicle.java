@@ -7,6 +7,8 @@ public abstract class Vehicle implements  Movable {
     private Color color; // Color of the car
     private String modelName; // The car model name
     private int size;
+    protected int width;
+    protected int height;
 
     // How the car moves in x and y-coordinates
     private double x;
@@ -145,6 +147,10 @@ public abstract class Vehicle implements  Movable {
     }
 
     protected abstract double speedFactor();
+
+    public int getWidth() { return width; }
+
+    public int getHeight() { return height; }
 
 
     public void incrementSpeed(double amount) {
