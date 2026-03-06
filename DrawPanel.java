@@ -26,16 +26,8 @@ public class DrawPanel extends JPanel{
         this.sim = sim;
 
         vehicleImages = new ArrayList<>();
-        vehiclePoints = new ArrayList<>();
 
-        // Print an error message in case file is not found with a try/catch block
         try {
-            // You can remove the "pics" part if running outside of IntelliJ and
-            // everything is in the same main folder.
-            // volvoImage = ImageIO.read(new File("Volvo240.jpg"));
-
-            // Rememember to rightclick src New -> Package -> name: pics -> MOVE *.jpg to pics.
-            // if you are starting in IntelliJ.
             BufferedImage volvoImage = ImageIO.read(DrawPanel.class.getResourceAsStream("pics/Volvo240.jpg"));
             BufferedImage saabImage = ImageIO.read(DrawPanel.class.getResourceAsStream("pics/Saab95.jpg"));
             BufferedImage scaniaImage = ImageIO.read(DrawPanel.class.getResourceAsStream("pics/Scania.jpg"));
@@ -49,10 +41,6 @@ public class DrawPanel extends JPanel{
         {
             ex.printStackTrace();
         }
-
-        vehiclePoints.add(new Point(0, 0));
-        vehiclePoints.add(new Point(0, 100));
-        vehiclePoints.add(new Point(0, 200));
     }
 
     // This method is called each time the panel updates/refreshes/repaints itself
